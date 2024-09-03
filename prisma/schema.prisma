@@ -1,0 +1,77 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-py"
+}
+
+model OptimisationData {
+  id               Int      @id @default(autoincrement())
+  water_per_percent Float
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime
+}
+
+model WaterEvent {
+  id               Int      @id @default(autoincrement())
+  waterCycles      Int
+  elapsedTime      Int
+  startingSoilSensor Float
+  endingSoilSensor Float
+  note             String?
+  createdAt        DateTime @default(now())
+}
+
+model WeatherData {
+  id               Int      @id @default(autoincrement())
+  postCode         Int
+  rainfallRate     Float
+  mmOfRainfall     Float
+  sunrise          DateTime
+  sunset           DateTime
+  createdAt        DateTime @default(now())
+}
+
+model ErrorLog {
+  id               Int      @id @default(autoincrement())
+  error            String
+  createdAt        DateTime @default(now())
+}
+
+model Settings {
+  id                              Int      @id @default(autoincrement())
+  check_rate                      Int      @default(60000)
+
+  operating_settings_desired_moisture_level Float @default(100)
+  operating_settings_water_cycle_length Float @default(20)
+  operating_settings_water_threshold Float @default(20)
+  
+  operating_hours_mode            String   @default("auto")
+  operating_hours_start           String   @default("06:00")
+  operating_hours_end             String   @default("18:00")
+  
+  post_code                       Int      @default(2000)
+  location_code                   Int?
+  
+  weather_detection_enabled       Boolean  @default(true)
+  weather_detection_mode          String   @default("AND")
+  weather_detection_postpone_percentage Int @default(35)
+  weather_detection_postpone_mm   Float    @default(5)
+  
+  danger_mode_enabled             Boolean  @default(true)
+  danger_mode_level               Int      @default(10)
+  danger_mode_bypass_enabled      Boolean  @default(true)
+  danger_mode_bypass_water_percentage Int  @default(40)
+  
+  desired_soil_moisture           Float    @default(100)
+  water_cycle_length              Float    @default(5)
+  danger_soil_moisture            Float    @default(20)
+  
+  system_enabled                  Boolean  @default(false)
+  system_setup                    Boolean  @default(false)
+  is_setup                        Boolean  @default(false)
+  
+  allow_optimisation              Boolean  @default(false)
+}
